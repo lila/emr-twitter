@@ -1,0 +1,13 @@
+README for aws-twitter project
+
+aws-twitter is a simple emr-based project to analyze the twitter graph.
+The data is from:
+	http://an.kaist.ac.kr/traces/WWW2010.html
+and includes:
+  - 41.7 million user profiles, 
+  - 1.47 billion social relations (edges)
+
+S3 location for this dataset is:
+  s3://data.karanb.amazon.com/social/twitter.net
+
+
