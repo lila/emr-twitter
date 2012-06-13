@@ -11,3 +11,44 @@ S3 location for this dataset is:
   s3://data.karanb.amazon.com/social/twitter.net
 
 
+TO USE:
+------
+
+Step 0: edit the Makefile to reflect your environement.
+
+	set the path to your emr commandline executable, and your s3cmd,
+	and set the other variables as appropriate
+
+Step 1: create the cluster
+
+	% make create
+
+	this will create a jobflow and put the jobflowid in ./jobflowid
+	if all goes well.  
+
+Step 2: push jars and scripts to s3 bucket
+
+	% make bootstrap
+
+	this will create a new bucket on s3 and push the jar files in lib/
+	and the scripts in hive/ and pig/ to the new bucket.
+
+Step 3: submit a job
+
+	% make submithivejob
+
+	% make submitpigjob
+
+	% make submitjarjob
+
+	Each will submit a new job to the hadoop cluster
+
+
+Step 4: look for output
+
+	% make logs
+
+	will show the stdout/stderr of the current job.  
+
+
+Of course, feel free to edit the Makefile to better suite your needs.

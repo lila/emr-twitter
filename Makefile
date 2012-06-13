@@ -55,7 +55,8 @@ cleanbootstrap:
 destroy: cleanbootstrap
 	@ echo deleting server stack simple.emr
 	-${EMR} -j `cat ./jobflowid` --terminate
-	rm ./jobflowid
+	-rm ./jobflowid
+	-rm ./numberOfMappers
 
 
 #
@@ -84,7 +85,7 @@ create:
 	${EMR} elastic-mapreduce --create --alive --name "$(USER)'s Twitter Analytics EMR Cluster" \
 	--num-instances ${CLUSTERSIZE} \
 	--hive-interactive \
-	--instance-type cc2.8xlarge | cut -d " " -f 4 > ./jobflowid
+	--instance-type c1.medium | cut -d " " -f 4 > ./jobflowid
 	@ echo "24 * (${CLUSTERSIZE} - 1)" | bc  > ./numberOfMappers
 
 submitpigjob: 
