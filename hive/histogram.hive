@@ -1,7 +1,4 @@
-create table twitter (user STRING, follower STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t';
-
-load data inpath '/twitter.net' into table twitter;
-(local HDFS)
+create external table if not exists twitter (user STRING, follower STRING) ROW FORMAT DELIMITED FIELDS TERMINATED BY '\t' location 's3://data.karanb.amazon.com/social/' ;
 
 select followers, count(*) from (select count(*) followers from twitter group by user) c group by followers order by followers asc;
 

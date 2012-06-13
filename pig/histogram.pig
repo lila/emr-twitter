@@ -1,5 +1,7 @@
-A = load ’s3://bucket/twitter.data';                                                 
-B = foreach A generate FLATTEN(TOBAG(TOTUPLE($0, $1), TOTUPLE($1,$0)));
-C = group B by $0 PARALLEL 100;                                             
-D = foreach C generate group, COUNT($1);                                    
-store D into 's3://bucket/twitter.out’
+A = load ‘s3://data.karanb.amazon.com/social/twitter.net';                                                    
+B = group A by $0 PARALLEL 54;                                              
+C = foreach B generate group, COUNT($1);                                    
+D = group C by $1 PARALLEL 54;                                              
+E = foreach D generate group, COUNT($1); 
+F = order E by $0 asc PARALLEL 54;
+dump F;

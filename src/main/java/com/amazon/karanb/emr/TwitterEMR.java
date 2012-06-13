@@ -6,8 +6,6 @@
 
 package com.amazon.karanb.emr;
 
-package com.amazon.karanb.emr;
-
 import org.apache.hadoop.mapreduce.lib.input.TextInputFormat;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;

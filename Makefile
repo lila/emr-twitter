@@ -62,9 +62,9 @@ destroy: cleanbootstrap
 # push data into s3 
 #
 
-bootstrap: ./target/SimpleEMR-0.1.0-job.jar
+bootstrap: ./target/TwitterEMR-0.1.0-job.jar
 	-${S3CMD} mb s3://$(USER).twitter.emr
-	${S3CMD} sync --acl-public ./target/SimpleEMR-0.1.0-job.jar  s3://$(USER).twitter.emr
+	${S3CMD} sync --acl-public ./target/TwitterEMR-0.1.0-job.jar  s3://$(USER).twitter.emr
 	${S3CMD} sync --acl-public ./pig s3://${USER}.twitter.emr/ 
 	${S3CMD} sync --acl-public ./lib s3://${USER}.twitter.emr/ 
 	${S3CMD} sync --acl-public ./hive s3://${USER}.twitter.emr/
@@ -72,7 +72,7 @@ bootstrap: ./target/SimpleEMR-0.1.0-job.jar
 #
 # driver to build source code
 #
-./target/SimpleEMR-0.1.0-job.jar:
+./target/TwitterEMR-0.1.0-job.jar:
 	mvn package
 
 #
@@ -88,10 +88,10 @@ create:
 	@ echo "24 * (${CLUSTERSIZE} - 1)" | bc  > ./numberOfMappers
 
 submitpigjob: 
-	${EMR} -j `cat ./jobflowid` --jar s3://$(USER).simple.emr/SimpleEMR-0.1.0-job.jar --arg s3://com.amazon.karan.ebstest/nt2.fs --arg s3://$(USER).simple.emr/output
+	${EMR} -j `cat ./jobflowid` --jar s3://$(USER).twitter.emr/lib/pig-0.9.2-withouthadoop.jar --arg -Dmapred.max.split.size=25000000 --arg -Dio.file.buffer.size=1048576 --arg s3://$(USER).twitter.emr/pig/histogram.pig
 
 submithivejob: 
-	${EMR} -j `cat ./jobflowid` --jar s3://$(USER).simple.emr/SimpleEMR-0.1.0-job.jar --arg s3://com.amazon.karan.ebstest/nt2.fs --arg s3://$(USER).simple.emr/output
+	${EMR} -j `cat ./jobflowid` --hive-script --args s3://$(USER).twitter.emr/hive/histogram.hive --args -hiveconf,mapred.max.split.size=25000000 --args -hiveconf,io.file.buffer.size=1048576
 
 submitjavajob: 
 	${EMR} -j `cat ./jobflowid` --jar s3://$(USER).simple.emr/SimpleEMR-0.1.0-job.jar --arg s3://com.amazon.karan.ebstest/nt2.fs --arg s3://$(USER).simple.emr/output
